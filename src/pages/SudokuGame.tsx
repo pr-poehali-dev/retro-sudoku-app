@@ -332,25 +332,25 @@ export default function SudokuGame() {
             <TabsList className="grid w-full grid-cols-4 mb-6 bg-card japanese-card border-foreground">
               <TabsTrigger value="levels" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
                 <Icon name="Grid3x3" size={18} className="mr-2" />
-                レベル
+                Уровни
               </TabsTrigger>
               <TabsTrigger value="rules" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
                 <Icon name="BookOpen" size={18} className="mr-2" />
-                ルール
+                Правила
               </TabsTrigger>
               <TabsTrigger value="settings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
                 <Icon name="Settings" size={18} className="mr-2" />
-                設定
+                Настройки
               </TabsTrigger>
               <TabsTrigger value="profile" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
                 <Icon name="User" size={18} className="mr-2" />
-                プロフィール
+                Профиль
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="levels" className="animate-fade-in">
               <Card className="p-6 sm:p-8 japanese-card bg-card paper-texture">
-                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">難易度を選択</h2>
+                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">Выберите сложность</h2>
                 <div className="grid gap-4">
                   <Button 
                     onClick={() => startNewGame('easy')}
@@ -360,8 +360,8 @@ export default function SudokuGame() {
                       <div className="flex items-center gap-3">
                         <Icon name="Cherry" size={32} className="text-primary group-hover:scale-110 transition-transform" />
                         <div className="text-left">
-                          <p className="text-xl font-bold">初級</p>
-                          <p className="text-sm text-muted-foreground">初心者向け</p>
+                          <p className="text-xl font-bold">Новичок</p>
+                          <p className="text-sm text-muted-foreground">для начинающих</p>
                         </div>
                       </div>
                       <span className="text-3xl opacity-20">一</span>
@@ -375,8 +375,8 @@ export default function SudokuGame() {
                       <div className="flex items-center gap-3">
                         <Icon name="Mountain" size={32} className="text-primary group-hover:scale-110 transition-transform" />
                         <div className="text-left">
-                          <p className="text-xl font-bold">中級</p>
-                          <p className="text-sm text-muted-foreground">経験者向け</p>
+                          <p className="text-xl font-bold">Средний</p>
+                          <p className="text-sm text-muted-foreground">для опытных</p>
                         </div>
                       </div>
                       <span className="text-3xl opacity-20">二</span>
@@ -390,8 +390,8 @@ export default function SudokuGame() {
                       <div className="flex items-center gap-3">
                         <Icon name="Zap" size={32} className="text-primary group-hover:scale-110 transition-transform" />
                         <div className="text-left">
-                          <p className="text-xl font-bold">上級</p>
-                          <p className="text-sm text-muted-foreground">マスター向け</p>
+                          <p className="text-xl font-bold">Эксперт</p>
+                          <p className="text-sm text-muted-foreground">для мастеров</p>
                         </div>
                       </div>
                       <span className="text-3xl opacity-20">三</span>
@@ -403,28 +403,28 @@ export default function SudokuGame() {
 
             <TabsContent value="rules" className="animate-fade-in">
               <Card className="p-6 sm:p-8 japanese-card bg-card paper-texture">
-                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">ルール</h2>
+                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">Правила игры</h2>
                 <div className="space-y-4 text-foreground/90">
                   <div className="flex items-start gap-3 p-3 japanese-card bg-background/50">
                     <span className="text-2xl font-bold text-primary">一</span>
-                    <p>9×9のグリッドを1から9の数字で埋める</p>
+                    <p>Заполните сетку 9×9 цифрами от 1 до 9</p>
                   </div>
                   <div className="flex items-start gap-3 p-3 japanese-card bg-background/50">
                     <span className="text-2xl font-bold text-primary">二</span>
-                    <p>各行には1から9までの数字が重複なく含まれる</p>
+                    <p>В каждой строке должны быть цифры от 1 до 9 без повторений</p>
                   </div>
                   <div className="flex items-start gap-3 p-3 japanese-card bg-background/50">
                     <span className="text-2xl font-bold text-primary">三</span>
-                    <p>各列には1から9までの数字が重複なく含まれる</p>
+                    <p>В каждом столбце должны быть цифры от 1 до 9 без повторений</p>
                   </div>
                   <div className="flex items-start gap-3 p-3 japanese-card bg-background/50">
                     <span className="text-2xl font-bold text-primary">四</span>
-                    <p>各3×3のブロックには1から9までの数字が重複なく含まれる</p>
+                    <p>В каждом блоке 3×3 должны быть цифры от 1 до 9 без повторений</p>
                   </div>
                   <div className="mt-6 p-4 bg-accent/30 japanese-card border-foreground">
                     <p className="text-center font-medium flex items-center justify-center gap-2">
                       <span className="text-2xl">🧘</span>
-                      <span>集中と論理で解く</span>
+                      <span>Решайте с концентрацией и логикой</span>
                     </p>
                   </div>
                 </div>
@@ -433,12 +433,12 @@ export default function SudokuGame() {
 
             <TabsContent value="settings" className="animate-fade-in">
               <Card className="p-6 sm:p-8 japanese-card bg-card paper-texture">
-                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">設定</h2>
+                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">Настройки</h2>
                 <div className="space-y-6">
                   <div className="flex items-center justify-between p-4 japanese-card bg-background">
                     <div className="flex items-center gap-3">
                       <Icon name="Lightbulb" size={24} className="text-primary" />
-                      <Label htmlFor="hints" className="text-lg cursor-pointer font-medium">ヒントを有効にする</Label>
+                      <Label htmlFor="hints" className="text-lg cursor-pointer font-medium">Подсказки</Label>
                     </div>
                     <Switch 
                       id="hints" 
@@ -450,7 +450,7 @@ export default function SudokuGame() {
                   <div className="flex items-center justify-between p-4 japanese-card bg-background">
                     <div className="flex items-center gap-3">
                       <Icon name="Volume2" size={24} className="text-primary" />
-                      <Label htmlFor="sound" className="text-lg cursor-pointer font-medium">音声効果</Label>
+                      <Label htmlFor="sound" className="text-lg cursor-pointer font-medium">Звуковые эффекты</Label>
                     </div>
                     <Switch 
                       id="sound" 
@@ -461,7 +461,7 @@ export default function SudokuGame() {
                   </div>
                   <div className="p-4 bg-accent/30 japanese-card border-foreground">
                     <p className="text-sm text-center text-foreground/80">
-                      ヒントは困難な状況で役立ちますが、自分で解決することを試みてください！
+                      Подсказки помогут в трудной ситуации, но старайтесь решать самостоятельно!
                     </p>
                   </div>
                 </div>
@@ -470,7 +470,7 @@ export default function SudokuGame() {
 
             <TabsContent value="profile" className="animate-fade-in">
               <Card className="p-6 sm:p-8 japanese-card bg-card paper-texture">
-                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">プロフィール</h2>
+                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">Профиль игрока</h2>
                 <div className="flex flex-col items-center gap-6">
                   <div className="w-28 h-28 japanese-card bg-background flex items-center justify-center relative">
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -481,32 +481,32 @@ export default function SudokuGame() {
                     </div>
                   </div>
                   <div className="text-center">
-                    <h3 className="text-2xl font-bold mb-1">数独マスター</h3>
-                    <p className="text-muted-foreground text-sm">極めし者</p>
+                    <h3 className="text-2xl font-bold mb-1">Мастер Судоку</h3>
+                    <p className="text-muted-foreground text-sm">путь совершенствования</p>
                   </div>
                   
                   <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="p-6 japanese-card bg-background text-center">
                       <Icon name="Flame" size={32} className="mx-auto mb-2 text-primary" />
                       <p className="text-4xl font-bold text-foreground">{statistics.totalGames}</p>
-                      <p className="text-sm text-muted-foreground mt-1">総プレイ回数</p>
+                      <p className="text-sm text-muted-foreground mt-1">Всего игр</p>
                     </div>
                     <div className="p-6 japanese-card bg-background text-center">
                       <Icon name="Award" size={32} className="mx-auto mb-2 text-primary" />
                       <p className="text-4xl font-bold text-foreground">{gamesWon}</p>
-                      <p className="text-sm text-muted-foreground mt-1">勝利</p>
+                      <p className="text-sm text-muted-foreground mt-1">Побед</p>
                     </div>
                   </div>
 
                   <div className="w-full space-y-4 mt-4">
                     <h3 className="text-xl font-bold text-center text-foreground mb-4 flex items-center justify-center gap-2">
                       <span>🏆</span>
-                      <span>最高記録</span>
+                      <span>Лучшие результаты</span>
                     </h3>
                     
                     <div className="space-y-3">
                       {(['easy', 'medium', 'hard'] as const).map((level) => {
-                        const levelNames = { easy: '初級', medium: '中級', hard: '上級' };
+                        const levelNames = { easy: 'Новичок', medium: 'Средний', hard: 'Эксперт' };
                         const levelIcons = { easy: 'Cherry', medium: 'Mountain', hard: 'Zap' };
                         const levelKanji = { easy: '一', medium: '二', hard: '三' };
                         const score = statistics[level];
@@ -574,7 +574,7 @@ export default function SudokuGame() {
       <Dialog open={showVictory} onOpenChange={setShowVictory}>
         <DialogContent className="sm:max-w-md japanese-card bg-card paper-texture">
           <DialogHeader>
-            <DialogTitle className="text-center text-4xl font-bold text-foreground">🎊 勝利 🎊</DialogTitle>
+            <DialogTitle className="text-center text-4xl font-bold text-foreground">🎊 Победа 🎊</DialogTitle>
           </DialogHeader>
           <div className="text-center space-y-4 py-4">
             <div className="flex justify-center">
@@ -583,7 +583,7 @@ export default function SudokuGame() {
                 <div className="absolute -top-2 -right-2 w-12 h-12 japanese-card bg-background flex items-center justify-center text-2xl">🎯</div>
               </div>
             </div>
-            <p className="text-2xl font-bold">完成！</p>
+            <p className="text-2xl font-bold">Завершено!</p>
             
             {statistics[difficulty] && 
              (timer < statistics[difficulty]!.time || 
@@ -591,7 +591,7 @@ export default function SudokuGame() {
               <div className="p-3 japanese-card bg-primary/10 border-primary animate-fade-in">
                 <p className="text-sm font-bold text-primary flex items-center justify-center gap-2">
                   <span className="text-xl">⭐</span>
-                  新記録！
+                  Новый рекорд!
                   <span className="text-xl">⭐</span>
                 </p>
               </div>
@@ -600,21 +600,21 @@ export default function SudokuGame() {
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div className="p-4 japanese-card bg-background">
                 <Icon name="Clock" size={24} className="mx-auto mb-2 text-primary" />
-                <p className="text-sm text-muted-foreground">時間</p>
+                <p className="text-sm text-muted-foreground">Время</p>
                 <p className="text-lg font-bold">{formatTime(timer)}</p>
               </div>
               <div className="p-4 japanese-card bg-background">
                 <Icon name="AlertCircle" size={24} className="mx-auto mb-2 text-destructive" />
-                <p className="text-sm text-muted-foreground">ミス</p>
+                <p className="text-sm text-muted-foreground">Ошибки</p>
                 <p className="text-lg font-bold">{mistakes}</p>
               </div>
             </div>
             
             {statistics[difficulty] && (
               <div className="p-3 japanese-card bg-background text-sm">
-                <p className="text-muted-foreground mb-1">最高記録:</p>
+                <p className="text-muted-foreground mb-1">Лучший результат:</p>
                 <p className="font-semibold">
-                  {formatTime(statistics[difficulty]!.time)} • {statistics[difficulty]!.mistakes} ミス
+                  {formatTime(statistics[difficulty]!.time)} • {statistics[difficulty]!.mistakes} ошибок
                 </p>
               </div>
             )}
@@ -626,7 +626,7 @@ export default function SudokuGame() {
               }}
               className="w-full mt-4 japanese-card bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
             >
-              メニューに戻る
+              В меню
             </Button>
           </div>
         </DialogContent>
@@ -640,7 +640,7 @@ export default function SudokuGame() {
             className="japanese-card hover:bg-secondary font-medium"
           >
             <Icon name="ArrowLeft" size={20} className="mr-2" />
-            メニュー
+            Меню
           </Button>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 japanese-card bg-card px-4 py-2">
@@ -694,7 +694,7 @@ export default function SudokuGame() {
                 className="japanese-card bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
               >
                 <Icon name="Lightbulb" size={20} className="mr-2" />
-                ヒント
+                Подсказка
               </Button>
             )}
             <Button
@@ -702,7 +702,7 @@ export default function SudokuGame() {
               className="japanese-card bg-card hover:bg-secondary font-medium"
             >
               <Icon name="RotateCw" size={20} className="mr-2" />
-              新しいゲーム
+              Новая игра
             </Button>
           </div>
         </Card>
