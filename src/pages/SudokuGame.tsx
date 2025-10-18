@@ -12,6 +12,19 @@ type Difficulty = 'easy' | 'medium' | 'hard';
 type CellValue = number | null;
 type Board = CellValue[][];
 
+interface BestScore {
+  time: number;
+  mistakes: number;
+  date: string;
+}
+
+interface Statistics {
+  easy: BestScore | null;
+  medium: BestScore | null;
+  hard: BestScore | null;
+  totalGames: number;
+}
+
 const generateSudoku = (difficulty: Difficulty): { puzzle: Board; solution: Board } => {
   const solution: Board = Array(9).fill(null).map(() => Array(9).fill(null));
   
@@ -76,6 +89,10 @@ export default function SudokuGame() {
   const [isRunning, setIsRunning] = useState(false);
   const [hintsEnabled, setHintsEnabled] = useState(true);
   const [gamesWon, setGamesWon] = useState(0);
+  const [statistics, setStatistics] = useState<Statistics>(() => {
+    const saved = localStorage.getItem('sudoku-statistics');
+    return saved ? JSON.parse(saved) : { easy: null, medium: null, hard: null, totalGames: 0 };
+  });
   const [currentView, setCurrentView] = useState<'menu' | 'game'>('menu');
   const [mistakes, setMistakes] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -90,6 +107,17 @@ export default function SudokuGame() {
     }
     return () => clearInterval(interval);
   }, [isRunning]);
+
+  useEffect(() => {
+    const savedGamesWon = localStorage.getItem('sudoku-games-won');
+    if (savedGamesWon) {
+      setGamesWon(parseInt(savedGamesWon));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('sudoku-games-won', gamesWon.toString());
+  }, [gamesWon]);
 
   const startNewGame = (diff: Difficulty) => {
     const { puzzle, solution: sol } = generateSudoku(diff);
@@ -164,6 +192,23 @@ export default function SudokuGame() {
       setGamesWon(g => g + 1);
       setShowConfetti(true);
       setShowVictory(true);
+      
+      const newStats = { ...statistics };
+      newStats.totalGames += 1;
+      
+      const currentScore: BestScore = {
+        time: timer,
+        mistakes: mistakes,
+        date: new Date().toLocaleDateString('ru-RU')
+      };
+      
+      const bestScore = newStats[difficulty];
+      if (!bestScore || timer < bestScore.time || (timer === bestScore.time && mistakes < bestScore.mistakes)) {
+        newStats[difficulty] = currentScore;
+      }
+      
+      setStatistics(newStats);
+      localStorage.setItem('sudoku-statistics', JSON.stringify(newStats));
       
       if (soundEnabled) {
         setTimeout(() => playSound(523.25, 0.2, 'win'), 0);
@@ -347,16 +392,60 @@ export default function SudokuGame() {
                     <h3 className="text-2xl font-bold mb-2">Судоку Мастер</h3>
                     <p className="text-muted-foreground">Элегантный игрок</p>
                   </div>
+                  
                   <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="p-6 bg-gradient-to-br from-secondary to-accent rounded-lg text-center vintage-shadow">
                       <Icon name="Trophy" size={32} className="mx-auto mb-2 text-primary" />
+                      <p className="text-3xl font-bold text-primary">{statistics.totalGames}</p>
+                      <p className="text-sm text-muted-foreground mt-1">Всего игр</p>
+                    </div>
+                    <div className="p-6 bg-gradient-to-br from-accent to-primary/20 rounded-lg text-center vintage-shadow">
+                      <Icon name="Award" size={32} className="mx-auto mb-2 text-primary" />
                       <p className="text-3xl font-bold text-primary">{gamesWon}</p>
                       <p className="text-sm text-muted-foreground mt-1">Побед</p>
                     </div>
-                    <div className="p-6 bg-gradient-to-br from-accent to-primary/20 rounded-lg text-center vintage-shadow">
-                      <Icon name="Star" size={32} className="mx-auto mb-2 text-primary" />
-                      <p className="text-3xl font-bold text-primary">{difficulty}</p>
-                      <p className="text-sm text-muted-foreground mt-1">Последний уровень</p>
+                  </div>
+
+                  <div className="w-full space-y-4 mt-4">
+                    <h3 className="text-xl font-bold text-center text-primary mb-4">🏆 Лучшие результаты</h3>
+                    
+                    <div className="space-y-3">
+                      {(['easy', 'medium', 'hard'] as const).map((level) => {
+                        const levelNames = { easy: 'Легкий', medium: 'Средний', hard: 'Сложный' };
+                        const levelIcons = { easy: 'Flower', medium: 'Sparkles', hard: 'Crown' };
+                        const score = statistics[level];
+                        
+                        return (
+                          <div key={level} className="p-4 bg-gradient-to-r from-secondary/30 to-accent/30 rounded-lg border border-primary/20">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <Icon name={levelIcons[level]} size={24} className="text-primary" />
+                                <div>
+                                  <p className="font-semibold">{levelNames[level]}</p>
+                                  {score ? (
+                                    <div className="text-sm text-muted-foreground flex items-center gap-4 mt-1">
+                                      <span className="flex items-center gap-1">
+                                        <Icon name="Clock" size={14} />
+                                        {Math.floor(score.time / 60)}:{(score.time % 60).toString().padStart(2, '0')}
+                                      </span>
+                                      <span className="flex items-center gap-1">
+                                        <Icon name="AlertCircle" size={14} />
+                                        {score.mistakes}
+                                      </span>
+                                      <span className="text-xs">{score.date}</span>
+                                    </div>
+                                  ) : (
+                                    <p className="text-sm text-muted-foreground mt-1">Нет результата</p>
+                                  )}
+                                </div>
+                              </div>
+                              {score && (
+                                <Icon name="Medal" size={28} className="text-primary" />
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -382,6 +471,19 @@ export default function SudokuGame() {
               <Icon name="Trophy" size={80} className="text-primary animate-scale-in" />
             </div>
             <p className="text-xl font-semibold">Вы решили судоку!</p>
+            
+            {statistics[difficulty] && 
+             (timer < statistics[difficulty]!.time || 
+              (timer === statistics[difficulty]!.time && mistakes <= statistics[difficulty]!.mistakes)) && (
+              <div className="p-3 bg-primary/20 rounded-lg border-2 border-primary animate-fade-in">
+                <p className="text-sm font-bold text-primary flex items-center justify-center gap-2">
+                  <Icon name="Star" size={20} />
+                  Новый рекорд!
+                  <Icon name="Star" size={20} />
+                </p>
+              </div>
+            )}
+            
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div className="p-4 bg-background/50 rounded-lg">
                 <Icon name="Clock" size={24} className="mx-auto mb-2 text-primary" />
@@ -394,6 +496,16 @@ export default function SudokuGame() {
                 <p className="text-lg font-bold">{mistakes}</p>
               </div>
             </div>
+            
+            {statistics[difficulty] && (
+              <div className="p-3 bg-background/30 rounded-lg text-sm">
+                <p className="text-muted-foreground mb-1">Лучший результат:</p>
+                <p className="font-semibold">
+                  {formatTime(statistics[difficulty]!.time)} • {statistics[difficulty]!.mistakes} ошибок
+                </p>
+              </div>
+            )}
+            
             <Button 
               onClick={() => {
                 setShowVictory(false);
