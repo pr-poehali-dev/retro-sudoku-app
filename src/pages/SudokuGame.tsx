@@ -99,6 +99,7 @@ export default function SudokuGame() {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showVictory, setShowVictory] = useState(false);
   const audioContextRef = useRef<AudioContext | null>(null);
+  const [sakuraParticles, setSakuraParticles] = useState<Array<{id: number, x: number, delay: number, duration: number}>>([]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -113,6 +114,14 @@ export default function SudokuGame() {
     if (savedGamesWon) {
       setGamesWon(parseInt(savedGamesWon));
     }
+    
+    const particles = Array.from({ length: 15 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 8 + Math.random() * 4
+    }));
+    setSakuraParticles(particles);
   }, []);
 
   useEffect(() => {
@@ -148,20 +157,57 @@ export default function SudokuGame() {
     }
     
     const ctx = audioContextRef.current;
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
     
-    oscillator.connect(gainNode);
-    gainNode.connect(ctx.destination);
-    
-    oscillator.frequency.value = frequency;
-    oscillator.type = type === 'win' ? 'sine' : 'triangle';
-    
-    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
-    
-    oscillator.start(ctx.currentTime);
-    oscillator.stop(ctx.currentTime + duration);
+    if (type === 'correct') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.05);
+      osc.type = 'sine';
+      
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+      
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + duration);
+    } else if (type === 'wrong') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.frequency.setValueAtTime(200, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.2);
+      osc.type = 'sawtooth';
+      
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+      
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + duration);
+    } else if (type === 'win') {
+      const frequencies = [523.25, 587.33, 659.25, 783.99, 880.00];
+      frequencies.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc.frequency.value = freq;
+        osc.type = 'sine';
+        
+        const startTime = ctx.currentTime + i * 0.1;
+        gain.gain.setValueAtTime(0, startTime);
+        gain.gain.linearRampToValueAtTime(0.15, startTime + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+        
+        osc.start(startTime);
+        osc.stop(startTime + 0.3);
+      });
+    }
   };
 
   const handleNumberInput = (num: number) => {
@@ -211,10 +257,7 @@ export default function SudokuGame() {
       localStorage.setItem('sudoku-statistics', JSON.stringify(newStats));
       
       if (soundEnabled) {
-        setTimeout(() => playSound(523.25, 0.2, 'win'), 0);
-        setTimeout(() => playSound(659.25, 0.2, 'win'), 150);
-        setTimeout(() => playSound(783.99, 0.2, 'win'), 300);
-        setTimeout(() => playSound(1046.50, 0.4, 'win'), 450);
+        playSound(523.25, 0.5, 'win');
       }
       
       setTimeout(() => {
@@ -256,8 +299,19 @@ export default function SudokuGame() {
 
   if (currentView === 'menu') {
     return (
-      <div className="min-h-screen paper-texture bg-gradient-to-b from-background to-secondary p-4 sm:p-8">
-        <div className="max-w-4xl mx-auto">
+      <div className="min-h-screen paper-texture bg-gradient-to-b from-background to-secondary p-4 sm:p-8 relative overflow-hidden">
+        {sakuraParticles.map(particle => (
+          <div
+            key={particle.id}
+            className="sakura-petal"
+            style={{
+              left: `${particle.x}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s, 3s`
+            }}
+          />
+        ))}
+        <div className="max-w-4xl mx-auto relative z-10">
           <div className="text-center mb-8 animate-fade-in relative">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 opacity-10">
               <svg viewBox="0 0 100 100" className="w-full h-full">
@@ -503,7 +557,18 @@ export default function SudokuGame() {
   }
 
   return (
-    <div className="min-h-screen paper-texture bg-gradient-to-b from-background to-secondary p-4 sm:p-8 relative">
+    <div className="min-h-screen paper-texture bg-gradient-to-b from-background to-secondary p-4 sm:p-8 relative overflow-hidden">
+      {sakuraParticles.map(particle => (
+        <div
+          key={particle.id}
+          className="sakura-petal"
+          style={{
+            left: `${particle.x}%`,
+            animationDelay: `${particle.delay}s`,
+            animationDuration: `${particle.duration}s, 3s`
+          }}
+        />
+      ))}
       {showConfetti && <Confetti recycle={false} numberOfPieces={500} gravity={0.3} colors={['#DC143C', '#FFB7C5', '#FFF8DC', '#8B0000', '#FF69B4']} />}
       
       <Dialog open={showVictory} onOpenChange={setShowVictory}>
@@ -567,7 +632,7 @@ export default function SudokuGame() {
         </DialogContent>
       </Dialog>
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto relative z-10">
         <div className="flex items-center justify-between mb-6">
           <Button 
             variant="outline" 
