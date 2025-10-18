@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import Confetti from 'react-confetti';
 
 type Difficulty = 'easy' | 'medium' | 'hard';
 type CellValue = number | null;
@@ -77,6 +78,10 @@ export default function SudokuGame() {
   const [gamesWon, setGamesWon] = useState(0);
   const [currentView, setCurrentView] = useState<'menu' | 'game'>('menu');
   const [mistakes, setMistakes] = useState(0);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [showVictory, setShowVictory] = useState(false);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -97,12 +102,38 @@ export default function SudokuGame() {
     setSelectedCell(null);
     setMistakes(0);
     setCurrentView('game');
+    setShowVictory(false);
+    setShowConfetti(false);
   };
 
   const handleCellClick = (row: number, col: number) => {
     if (initialBoard[row][col] === null) {
       setSelectedCell([row, col]);
     }
+  };
+
+  const playSound = (frequency: number, duration: number, type: 'correct' | 'wrong' | 'win' = 'correct') => {
+    if (!soundEnabled) return;
+    
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext();
+    }
+    
+    const ctx = audioContextRef.current;
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    
+    oscillator.frequency.value = frequency;
+    oscillator.type = type === 'win' ? 'sine' : 'triangle';
+    
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+    
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + duration);
   };
 
   const handleNumberInput = (num: number) => {
@@ -115,6 +146,9 @@ export default function SudokuGame() {
     
     if (solution[row][col] !== num) {
       setMistakes(m => m + 1);
+      playSound(200, 0.2, 'wrong');
+    } else {
+      playSound(523.25, 0.15, 'correct');
     }
     
     setBoard(newBoard);
@@ -128,7 +162,19 @@ export default function SudokuGame() {
     if (isComplete) {
       setIsRunning(false);
       setGamesWon(g => g + 1);
-      setTimeout(() => alert('🎀 Поздравляю! Вы решили судоку! 🎀'), 100);
+      setShowConfetti(true);
+      setShowVictory(true);
+      
+      if (soundEnabled) {
+        setTimeout(() => playSound(523.25, 0.2, 'win'), 0);
+        setTimeout(() => playSound(659.25, 0.2, 'win'), 150);
+        setTimeout(() => playSound(783.99, 0.2, 'win'), 300);
+        setTimeout(() => playSound(1046.50, 0.4, 'win'), 450);
+      }
+      
+      setTimeout(() => {
+        setShowConfetti(false);
+      }, 5000);
     }
   };
 
@@ -269,6 +315,18 @@ export default function SudokuGame() {
                       className="data-[state=checked]:bg-primary"
                     />
                   </div>
+                  <div className="flex items-center justify-between p-4 bg-secondary/20 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <Icon name="Volume2" size={24} className="text-primary" />
+                      <Label htmlFor="sound" className="text-lg cursor-pointer">Звуковые эффекты</Label>
+                    </div>
+                    <Switch 
+                      id="sound" 
+                      checked={soundEnabled} 
+                      onCheckedChange={setSoundEnabled}
+                      className="data-[state=checked]:bg-primary"
+                    />
+                  </div>
                   <div className="p-4 bg-accent/20 rounded-lg border border-primary/20">
                     <p className="text-sm text-center text-muted-foreground">
                       Подсказки помогут вам в сложных ситуациях, но постарайтесь обойтись без них!
@@ -311,7 +369,44 @@ export default function SudokuGame() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-secondary via-background to-accent p-4 sm:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-secondary via-background to-accent p-4 sm:p-8 relative">
+      {showConfetti && <Confetti recycle={false} numberOfPieces={500} gravity={0.3} colors={['#8B5CF6', '#FFDEE2', '#E5DEFF', '#FEF7CD', '#D946EF']} />}
+      
+      <Dialog open={showVictory} onOpenChange={setShowVictory}>
+        <DialogContent className="sm:max-w-md bg-gradient-to-br from-secondary to-accent border-primary/40">
+          <DialogHeader>
+            <DialogTitle className="text-center text-4xl font-bold text-primary">🎀 Поздравляю! 🎀</DialogTitle>
+          </DialogHeader>
+          <div className="text-center space-y-4 py-4">
+            <div className="flex justify-center">
+              <Icon name="Trophy" size={80} className="text-primary animate-scale-in" />
+            </div>
+            <p className="text-xl font-semibold">Вы решили судоку!</p>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="p-4 bg-background/50 rounded-lg">
+                <Icon name="Clock" size={24} className="mx-auto mb-2 text-primary" />
+                <p className="text-sm text-muted-foreground">Время</p>
+                <p className="text-lg font-bold">{formatTime(timer)}</p>
+              </div>
+              <div className="p-4 bg-background/50 rounded-lg">
+                <Icon name="AlertCircle" size={24} className="mx-auto mb-2 text-destructive" />
+                <p className="text-sm text-muted-foreground">Ошибки</p>
+                <p className="text-lg font-bold">{mistakes}</p>
+              </div>
+            </div>
+            <Button 
+              onClick={() => {
+                setShowVictory(false);
+                setCurrentView('menu');
+              }}
+              className="w-full mt-4 bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              Вернуться в меню
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <Button 
