@@ -245,113 +245,146 @@ export default function SudokuGame() {
     const isInitial = initialBoard[row][col] !== null;
     const isWrong = board[row][col] !== null && board[row][col] !== solution[row][col];
     
-    return `w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center border border-primary/30 cursor-pointer
-      transition-all duration-200 hover:bg-secondary/50 font-semibold text-lg
-      ${isSelected ? 'bg-accent ring-2 ring-primary' : ''}
-      ${isInitial ? 'bg-card text-foreground font-bold' : 'text-primary'}
+    return `w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center border-2 border-foreground cursor-pointer
+      transition-all duration-150 hover:bg-accent/50 font-bold text-lg
+      ${isSelected ? 'bg-primary/20 shadow-[2px_2px_0_hsl(var(--foreground))]' : ''}
+      ${isInitial ? 'bg-background text-foreground' : 'text-primary bg-card'}
       ${isWrong ? 'text-destructive' : ''}
-      ${col % 3 === 2 && col !== 8 ? 'border-r-2 border-r-primary/60' : ''}
-      ${row % 3 === 2 && row !== 8 ? 'border-b-2 border-b-primary/60' : ''}`;
+      ${col % 3 === 2 && col !== 8 ? 'border-r-4 border-r-foreground' : ''}
+      ${row % 3 === 2 && row !== 8 ? 'border-b-4 border-b-foreground' : ''}`;
   };
 
   if (currentView === 'menu') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-secondary via-background to-accent p-4 sm:p-8">
+      <div className="min-h-screen paper-texture bg-gradient-to-b from-background to-secondary p-4 sm:p-8">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8 animate-fade-in">
-            <h1 className="text-5xl sm:text-7xl font-bold text-primary mb-2">Судоку</h1>
-            <p className="text-xl text-muted-foreground italic">~ Элегантная головоломка ~</p>
-            <div className="flex justify-center gap-2 mt-4">
-              <div className="w-3 h-3 rounded-full bg-primary animate-pulse"></div>
-              <div className="w-3 h-3 rounded-full bg-secondary animate-pulse delay-100"></div>
-              <div className="w-3 h-3 rounded-full bg-accent animate-pulse delay-200"></div>
+          <div className="text-center mb-8 animate-fade-in relative">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 opacity-10">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary"/>
+                <text x="50" y="60" textAnchor="middle" fontSize="40" fill="currentColor" className="text-primary font-bold">禅</text>
+              </svg>
+            </div>
+            <h1 className="text-5xl sm:text-7xl font-bold text-foreground mb-2 relative brush-stroke">数独</h1>
+            <p className="text-lg text-muted-foreground tracking-widest">SUDOKU</p>
+            <div className="flex justify-center items-center gap-3 mt-6">
+              <div className="w-16 h-0.5 bg-primary"></div>
+              <div className="w-2 h-2 rotate-45 bg-primary"></div>
+              <div className="w-16 h-0.5 bg-primary"></div>
             </div>
           </div>
 
           <Tabs defaultValue="levels" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-6 bg-card vintage-shadow">
-              <TabsTrigger value="levels" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            <TabsList className="grid w-full grid-cols-4 mb-6 bg-card japanese-card border-foreground">
+              <TabsTrigger value="levels" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
                 <Icon name="Grid3x3" size={18} className="mr-2" />
-                Уровни
+                レベル
               </TabsTrigger>
-              <TabsTrigger value="rules" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <TabsTrigger value="rules" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
                 <Icon name="BookOpen" size={18} className="mr-2" />
-                Правила
+                ルール
               </TabsTrigger>
-              <TabsTrigger value="settings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <TabsTrigger value="settings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
                 <Icon name="Settings" size={18} className="mr-2" />
-                Настройки
+                設定
               </TabsTrigger>
-              <TabsTrigger value="profile" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <TabsTrigger value="profile" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
                 <Icon name="User" size={18} className="mr-2" />
-                Профиль
+                プロフィール
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="levels" className="animate-fade-in">
-              <Card className="p-6 sm:p-8 vintage-shadow bg-card/80 backdrop-blur">
-                <h2 className="text-3xl font-bold text-center mb-6 text-primary">Выберите сложность</h2>
+              <Card className="p-6 sm:p-8 japanese-card bg-card paper-texture">
+                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">難易度を選択</h2>
                 <div className="grid gap-4">
                   <Button 
                     onClick={() => startNewGame('easy')}
-                    className="h-16 text-lg bg-gradient-to-r from-secondary to-accent text-foreground hover:scale-105 transition-transform vintage-shadow"
+                    className="h-20 text-lg bg-card japanese-card border-foreground text-foreground hover:bg-secondary font-medium group"
                   >
-                    <Icon name="Flower" size={24} className="mr-3" />
-                    Легкий уровень
+                    <div className="flex items-center justify-between w-full px-4">
+                      <div className="flex items-center gap-3">
+                        <Icon name="Cherry" size={32} className="text-primary group-hover:scale-110 transition-transform" />
+                        <div className="text-left">
+                          <p className="text-xl font-bold">初級</p>
+                          <p className="text-sm text-muted-foreground">初心者向け</p>
+                        </div>
+                      </div>
+                      <span className="text-3xl opacity-20">一</span>
+                    </div>
                   </Button>
                   <Button 
                     onClick={() => startNewGame('medium')}
-                    className="h-16 text-lg bg-gradient-to-r from-accent to-primary text-primary-foreground hover:scale-105 transition-transform vintage-shadow"
+                    className="h-20 text-lg bg-card japanese-card border-foreground text-foreground hover:bg-accent font-medium group"
                   >
-                    <Icon name="Sparkles" size={24} className="mr-3" />
-                    Средний уровень
+                    <div className="flex items-center justify-between w-full px-4">
+                      <div className="flex items-center gap-3">
+                        <Icon name="Mountain" size={32} className="text-primary group-hover:scale-110 transition-transform" />
+                        <div className="text-left">
+                          <p className="text-xl font-bold">中級</p>
+                          <p className="text-sm text-muted-foreground">経験者向け</p>
+                        </div>
+                      </div>
+                      <span className="text-3xl opacity-20">二</span>
+                    </div>
                   </Button>
                   <Button 
                     onClick={() => startNewGame('hard')}
-                    className="h-16 text-lg bg-gradient-to-r from-primary to-purple-600 text-primary-foreground hover:scale-105 transition-transform vintage-shadow"
+                    className="h-20 text-lg bg-card japanese-card border-foreground text-foreground hover:bg-primary/10 font-medium group"
                   >
-                    <Icon name="Crown" size={24} className="mr-3" />
-                    Сложный уровень
+                    <div className="flex items-center justify-between w-full px-4">
+                      <div className="flex items-center gap-3">
+                        <Icon name="Zap" size={32} className="text-primary group-hover:scale-110 transition-transform" />
+                        <div className="text-left">
+                          <p className="text-xl font-bold">上級</p>
+                          <p className="text-sm text-muted-foreground">マスター向け</p>
+                        </div>
+                      </div>
+                      <span className="text-3xl opacity-20">三</span>
+                    </div>
                   </Button>
                 </div>
               </Card>
             </TabsContent>
 
             <TabsContent value="rules" className="animate-fade-in">
-              <Card className="p-6 sm:p-8 vintage-shadow bg-card/80 backdrop-blur">
-                <h2 className="text-3xl font-bold text-center mb-6 text-primary">Правила игры</h2>
+              <Card className="p-6 sm:p-8 japanese-card bg-card paper-texture">
+                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">ルール</h2>
                 <div className="space-y-4 text-foreground/90">
-                  <div className="flex items-start gap-3">
-                    <Icon name="Check" size={20} className="text-primary mt-1 flex-shrink-0" />
-                    <p>Заполните сетку 9×9 цифрами от 1 до 9</p>
+                  <div className="flex items-start gap-3 p-3 japanese-card bg-background/50">
+                    <span className="text-2xl font-bold text-primary">一</span>
+                    <p>9×9のグリッドを1から9の数字で埋める</p>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Icon name="Check" size={20} className="text-primary mt-1 flex-shrink-0" />
-                    <p>В каждой строке должны быть все цифры от 1 до 9 без повторений</p>
+                  <div className="flex items-start gap-3 p-3 japanese-card bg-background/50">
+                    <span className="text-2xl font-bold text-primary">二</span>
+                    <p>各行には1から9までの数字が重複なく含まれる</p>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Icon name="Check" size={20} className="text-primary mt-1 flex-shrink-0" />
-                    <p>В каждом столбце должны быть все цифры от 1 до 9 без повторений</p>
+                  <div className="flex items-start gap-3 p-3 japanese-card bg-background/50">
+                    <span className="text-2xl font-bold text-primary">三</span>
+                    <p>各列には1から9までの数字が重複なく含まれる</p>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Icon name="Check" size={20} className="text-primary mt-1 flex-shrink-0" />
-                    <p>В каждом квадрате 3×3 должны быть все цифры от 1 до 9 без повторений</p>
+                  <div className="flex items-start gap-3 p-3 japanese-card bg-background/50">
+                    <span className="text-2xl font-bold text-primary">四</span>
+                    <p>各3×3のブロックには1から9までの数字が重複なく含まれる</p>
                   </div>
-                  <div className="mt-6 p-4 bg-secondary/30 rounded-lg border border-primary/20">
-                    <p className="text-sm text-center italic">💡 Используйте логику и внимательность для решения головоломки</p>
+                  <div className="mt-6 p-4 bg-accent/30 japanese-card border-foreground">
+                    <p className="text-center font-medium flex items-center justify-center gap-2">
+                      <span className="text-2xl">🧘</span>
+                      <span>集中と論理で解く</span>
+                    </p>
                   </div>
                 </div>
               </Card>
             </TabsContent>
 
             <TabsContent value="settings" className="animate-fade-in">
-              <Card className="p-6 sm:p-8 vintage-shadow bg-card/80 backdrop-blur">
-                <h2 className="text-3xl font-bold text-center mb-6 text-primary">Настройки</h2>
+              <Card className="p-6 sm:p-8 japanese-card bg-card paper-texture">
+                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">設定</h2>
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between p-4 bg-secondary/20 rounded-lg">
+                  <div className="flex items-center justify-between p-4 japanese-card bg-background">
                     <div className="flex items-center gap-3">
                       <Icon name="Lightbulb" size={24} className="text-primary" />
-                      <Label htmlFor="hints" className="text-lg cursor-pointer">Включить подсказки</Label>
+                      <Label htmlFor="hints" className="text-lg cursor-pointer font-medium">ヒントを有効にする</Label>
                     </div>
                     <Switch 
                       id="hints" 
@@ -360,10 +393,10 @@ export default function SudokuGame() {
                       className="data-[state=checked]:bg-primary"
                     />
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-secondary/20 rounded-lg">
+                  <div className="flex items-center justify-between p-4 japanese-card bg-background">
                     <div className="flex items-center gap-3">
                       <Icon name="Volume2" size={24} className="text-primary" />
-                      <Label htmlFor="sound" className="text-lg cursor-pointer">Звуковые эффекты</Label>
+                      <Label htmlFor="sound" className="text-lg cursor-pointer font-medium">音声効果</Label>
                     </div>
                     <Switch 
                       id="sound" 
@@ -372,9 +405,9 @@ export default function SudokuGame() {
                       className="data-[state=checked]:bg-primary"
                     />
                   </div>
-                  <div className="p-4 bg-accent/20 rounded-lg border border-primary/20">
-                    <p className="text-sm text-center text-muted-foreground">
-                      Подсказки помогут вам в сложных ситуациях, но постарайтесь обойтись без них!
+                  <div className="p-4 bg-accent/30 japanese-card border-foreground">
+                    <p className="text-sm text-center text-foreground/80">
+                      ヒントは困難な状況で役立ちますが、自分で解決することを試みてください！
                     </p>
                   </div>
                 </div>
@@ -382,46 +415,58 @@ export default function SudokuGame() {
             </TabsContent>
 
             <TabsContent value="profile" className="animate-fade-in">
-              <Card className="p-6 sm:p-8 vintage-shadow bg-card/80 backdrop-blur">
-                <h2 className="text-3xl font-bold text-center mb-6 text-primary">Профиль игрока</h2>
+              <Card className="p-6 sm:p-8 japanese-card bg-card paper-texture">
+                <h2 className="text-3xl font-bold text-center mb-6 text-foreground">プロフィール</h2>
                 <div className="flex flex-col items-center gap-6">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center vintage-shadow">
-                    <Icon name="User" size={48} className="text-white" />
+                  <div className="w-28 h-28 japanese-card bg-background flex items-center justify-center relative">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg viewBox="0 0 100 100" className="w-20 h-20">
+                        <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary"/>
+                        <text x="50" y="65" textAnchor="middle" fontSize="35" fill="currentColor" className="text-primary font-bold">人</text>
+                      </svg>
+                    </div>
                   </div>
                   <div className="text-center">
-                    <h3 className="text-2xl font-bold mb-2">Судоку Мастер</h3>
-                    <p className="text-muted-foreground">Элегантный игрок</p>
+                    <h3 className="text-2xl font-bold mb-1">数独マスター</h3>
+                    <p className="text-muted-foreground text-sm">極めし者</p>
                   </div>
                   
                   <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-6 bg-gradient-to-br from-secondary to-accent rounded-lg text-center vintage-shadow">
-                      <Icon name="Trophy" size={32} className="mx-auto mb-2 text-primary" />
-                      <p className="text-3xl font-bold text-primary">{statistics.totalGames}</p>
-                      <p className="text-sm text-muted-foreground mt-1">Всего игр</p>
+                    <div className="p-6 japanese-card bg-background text-center">
+                      <Icon name="Flame" size={32} className="mx-auto mb-2 text-primary" />
+                      <p className="text-4xl font-bold text-foreground">{statistics.totalGames}</p>
+                      <p className="text-sm text-muted-foreground mt-1">総プレイ回数</p>
                     </div>
-                    <div className="p-6 bg-gradient-to-br from-accent to-primary/20 rounded-lg text-center vintage-shadow">
+                    <div className="p-6 japanese-card bg-background text-center">
                       <Icon name="Award" size={32} className="mx-auto mb-2 text-primary" />
-                      <p className="text-3xl font-bold text-primary">{gamesWon}</p>
-                      <p className="text-sm text-muted-foreground mt-1">Побед</p>
+                      <p className="text-4xl font-bold text-foreground">{gamesWon}</p>
+                      <p className="text-sm text-muted-foreground mt-1">勝利</p>
                     </div>
                   </div>
 
                   <div className="w-full space-y-4 mt-4">
-                    <h3 className="text-xl font-bold text-center text-primary mb-4">🏆 Лучшие результаты</h3>
+                    <h3 className="text-xl font-bold text-center text-foreground mb-4 flex items-center justify-center gap-2">
+                      <span>🏆</span>
+                      <span>最高記録</span>
+                    </h3>
                     
                     <div className="space-y-3">
                       {(['easy', 'medium', 'hard'] as const).map((level) => {
-                        const levelNames = { easy: 'Легкий', medium: 'Средний', hard: 'Сложный' };
-                        const levelIcons = { easy: 'Flower', medium: 'Sparkles', hard: 'Crown' };
+                        const levelNames = { easy: '初級', medium: '中級', hard: '上級' };
+                        const levelIcons = { easy: 'Cherry', medium: 'Mountain', hard: 'Zap' };
+                        const levelKanji = { easy: '一', medium: '二', hard: '三' };
                         const score = statistics[level];
                         
                         return (
-                          <div key={level} className="p-4 bg-gradient-to-r from-secondary/30 to-accent/30 rounded-lg border border-primary/20">
+                          <div key={level} className="p-4 japanese-card bg-background">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
-                                <Icon name={levelIcons[level]} size={24} className="text-primary" />
+                                <div className="relative">
+                                  <Icon name={levelIcons[level]} size={28} className="text-primary" />
+                                  <span className="absolute -top-1 -right-1 text-xs font-bold text-primary">{levelKanji[level]}</span>
+                                </div>
                                 <div>
-                                  <p className="font-semibold">{levelNames[level]}</p>
+                                  <p className="font-bold text-lg">{levelNames[level]}</p>
                                   {score ? (
                                     <div className="text-sm text-muted-foreground flex items-center gap-4 mt-1">
                                       <span className="flex items-center gap-1">
@@ -458,50 +503,53 @@ export default function SudokuGame() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-secondary via-background to-accent p-4 sm:p-8 relative">
-      {showConfetti && <Confetti recycle={false} numberOfPieces={500} gravity={0.3} colors={['#8B5CF6', '#FFDEE2', '#E5DEFF', '#FEF7CD', '#D946EF']} />}
+    <div className="min-h-screen paper-texture bg-gradient-to-b from-background to-secondary p-4 sm:p-8 relative">
+      {showConfetti && <Confetti recycle={false} numberOfPieces={500} gravity={0.3} colors={['#DC143C', '#FFB7C5', '#FFF8DC', '#8B0000', '#FF69B4']} />}
       
       <Dialog open={showVictory} onOpenChange={setShowVictory}>
-        <DialogContent className="sm:max-w-md bg-gradient-to-br from-secondary to-accent border-primary/40">
+        <DialogContent className="sm:max-w-md japanese-card bg-card paper-texture">
           <DialogHeader>
-            <DialogTitle className="text-center text-4xl font-bold text-primary">🎀 Поздравляю! 🎀</DialogTitle>
+            <DialogTitle className="text-center text-4xl font-bold text-foreground">🎊 勝利 🎊</DialogTitle>
           </DialogHeader>
           <div className="text-center space-y-4 py-4">
             <div className="flex justify-center">
-              <Icon name="Trophy" size={80} className="text-primary animate-scale-in" />
+              <div className="relative">
+                <Icon name="Trophy" size={80} className="text-primary animate-scale-in" />
+                <div className="absolute -top-2 -right-2 w-12 h-12 japanese-card bg-background flex items-center justify-center text-2xl">🎯</div>
+              </div>
             </div>
-            <p className="text-xl font-semibold">Вы решили судоку!</p>
+            <p className="text-2xl font-bold">完成！</p>
             
             {statistics[difficulty] && 
              (timer < statistics[difficulty]!.time || 
               (timer === statistics[difficulty]!.time && mistakes <= statistics[difficulty]!.mistakes)) && (
-              <div className="p-3 bg-primary/20 rounded-lg border-2 border-primary animate-fade-in">
+              <div className="p-3 japanese-card bg-primary/10 border-primary animate-fade-in">
                 <p className="text-sm font-bold text-primary flex items-center justify-center gap-2">
-                  <Icon name="Star" size={20} />
-                  Новый рекорд!
-                  <Icon name="Star" size={20} />
+                  <span className="text-xl">⭐</span>
+                  新記録！
+                  <span className="text-xl">⭐</span>
                 </p>
               </div>
             )}
             
             <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="p-4 bg-background/50 rounded-lg">
+              <div className="p-4 japanese-card bg-background">
                 <Icon name="Clock" size={24} className="mx-auto mb-2 text-primary" />
-                <p className="text-sm text-muted-foreground">Время</p>
+                <p className="text-sm text-muted-foreground">時間</p>
                 <p className="text-lg font-bold">{formatTime(timer)}</p>
               </div>
-              <div className="p-4 bg-background/50 rounded-lg">
+              <div className="p-4 japanese-card bg-background">
                 <Icon name="AlertCircle" size={24} className="mx-auto mb-2 text-destructive" />
-                <p className="text-sm text-muted-foreground">Ошибки</p>
+                <p className="text-sm text-muted-foreground">ミス</p>
                 <p className="text-lg font-bold">{mistakes}</p>
               </div>
             </div>
             
             {statistics[difficulty] && (
-              <div className="p-3 bg-background/30 rounded-lg text-sm">
-                <p className="text-muted-foreground mb-1">Лучший результат:</p>
+              <div className="p-3 japanese-card bg-background text-sm">
+                <p className="text-muted-foreground mb-1">最高記録:</p>
                 <p className="font-semibold">
-                  {formatTime(statistics[difficulty]!.time)} • {statistics[difficulty]!.mistakes} ошибок
+                  {formatTime(statistics[difficulty]!.time)} • {statistics[difficulty]!.mistakes} ミス
                 </p>
               </div>
             )}
@@ -511,9 +559,9 @@ export default function SudokuGame() {
                 setShowVictory(false);
                 setCurrentView('menu');
               }}
-              className="w-full mt-4 bg-primary text-primary-foreground hover:bg-primary/90"
+              className="w-full mt-4 japanese-card bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
             >
-              Вернуться в меню
+              メニューに戻る
             </Button>
           </div>
         </DialogContent>
@@ -524,26 +572,26 @@ export default function SudokuGame() {
           <Button 
             variant="outline" 
             onClick={() => setCurrentView('menu')}
-            className="vintage-shadow hover:bg-secondary"
+            className="japanese-card hover:bg-secondary font-medium"
           >
             <Icon name="ArrowLeft" size={20} className="mr-2" />
-            Меню
+            メニュー
           </Button>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-card px-4 py-2 rounded-lg vintage-shadow">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 japanese-card bg-card px-4 py-2">
               <Icon name="Clock" size={20} className="text-primary" />
               <span className="font-bold">{formatTime(timer)}</span>
             </div>
-            <div className="flex items-center gap-2 bg-card px-4 py-2 rounded-lg vintage-shadow">
-              <Icon name="AlertCircle" size={20} className="text-destructive" />
+            <div className="flex items-center gap-2 japanese-card bg-card px-4 py-2">
+              <Icon name="XCircle" size={20} className="text-destructive" />
               <span className="font-bold">{mistakes}</span>
             </div>
           </div>
         </div>
 
-        <Card className="p-4 sm:p-6 vintage-shadow bg-card/80 backdrop-blur mb-6">
+        <Card className="p-4 sm:p-6 japanese-card bg-card paper-texture mb-6">
           <div className="flex justify-center mb-4">
-            <div className="inline-block border-4 border-primary/40 rounded-lg p-2 bg-background/50">
+            <div className="inline-block border-4 border-foreground p-2 bg-background">
               {board.map((row, rowIndex) => (
                 <div key={rowIndex} className="flex">
                   {row.map((cell, colIndex) => (
@@ -566,31 +614,30 @@ export default function SudokuGame() {
                 key={num}
                 onClick={() => handleNumberInput(num)}
                 disabled={!selectedCell}
-                className="h-12 text-lg font-bold bg-gradient-to-br from-secondary to-accent text-foreground hover:scale-110 transition-transform vintage-shadow disabled:opacity-50"
+                className="h-12 text-lg font-bold japanese-card bg-background text-foreground hover:bg-accent disabled:opacity-50"
               >
                 {num}
               </Button>
             ))}
           </div>
 
-          <div className="flex justify-center gap-3">
+          <div className="flex justify-center gap-3 flex-wrap">
             {hintsEnabled && (
               <Button
                 onClick={getHint}
                 disabled={!selectedCell}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 vintage-shadow"
+                className="japanese-card bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
               >
                 <Icon name="Lightbulb" size={20} className="mr-2" />
-                Подсказка
+                ヒント
               </Button>
             )}
             <Button
               onClick={() => startNewGame(difficulty)}
-              variant="outline"
-              className="vintage-shadow hover:bg-secondary"
+              className="japanese-card bg-card hover:bg-secondary font-medium"
             >
               <Icon name="RotateCw" size={20} className="mr-2" />
-              Новая игра
+              新しいゲーム
             </Button>
           </div>
         </Card>

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600;700&family=Alegreya+Sans:wght@300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -6,35 +6,35 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 330 20% 25%;
+    --background: 35 20% 96%;
+    --foreground: 0 5% 15%;
 
-    --card: 300 30% 98%;
-    --card-foreground: 330 20% 25%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 5% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 330 20% 25%;
+    --popover-foreground: 0 5% 15%;
 
-    --primary: 267 57% 60%;
+    --primary: 0 65% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 350 100% 93%;
-    --secondary-foreground: 330 20% 25%;
+    --secondary: 45 100% 95%;
+    --secondary-foreground: 0 5% 15%;
 
-    --muted: 48 100% 95%;
-    --muted-foreground: 330 10% 45%;
+    --muted: 35 15% 90%;
+    --muted-foreground: 0 5% 40%;
 
-    --accent: 262 65% 93%;
-    --accent-foreground: 267 57% 40%;
+    --accent: 350 85% 88%;
+    --accent-foreground: 0 5% 15%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 267 30% 85%;
-    --input: 267 30% 85%;
-    --ring: 267 57% 60%;
+    --border: 0 8% 25%;
+    --input: 0 8% 88%;
+    --ring: 0 65% 50%;
 
-    --radius: 0.5rem;
+    --radius: 0.25rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -99,7 +99,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: "Alegreya Sans", sans-serif;
+    font-family: "Noto Sans JP", sans-serif;
   }
 
   h1,
@@ -108,10 +108,53 @@
   h4,
   h5,
   h6 {
-    font-family: "Cormorant", serif;
+    font-family: "Noto Serif JP", serif;
   }
 }
 
-.vintage-shadow {
-  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+@layer components {
+  .japanese-card {
+    border: 2px solid hsl(var(--border));
+    box-shadow: 4px 4px 0 hsl(var(--border));
+    transition: all 0.2s ease;
+  }
+
+  .japanese-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 hsl(var(--border));
+  }
+
+  .brush-stroke {
+    position: relative;
+  }
+
+  .brush-stroke::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--primary)),
+      transparent
+    );
+    opacity: 0.6;
+  }
+
+  .wave-pattern {
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      hsl(var(--border) / 0.1) 10px,
+      hsl(var(--border) / 0.1) 20px
+    );
+  }
+
+  .paper-texture {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  }
 }
