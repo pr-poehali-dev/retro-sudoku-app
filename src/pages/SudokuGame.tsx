@@ -100,6 +100,7 @@ export default function SudokuGame() {
   const [showVictory, setShowVictory] = useState(false);
   const audioContextRef = useRef<AudioContext | null>(null);
   const [sakuraParticles, setSakuraParticles] = useState<Array<{id: number, x: number, delay: number, duration: number}>>([]);
+  const [wrongCell, setWrongCell] = useState<[number, number] | null>(null);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -221,6 +222,8 @@ export default function SudokuGame() {
     if (solution[row][col] !== num) {
       setMistakes(m => m + 1);
       playSound(200, 0.2, 'wrong');
+      setWrongCell([row, col]);
+      setTimeout(() => setWrongCell(null), 500);
     } else {
       playSound(523.25, 0.15, 'correct');
     }
@@ -287,12 +290,14 @@ export default function SudokuGame() {
     const isSelected = selectedCell?.[0] === row && selectedCell?.[1] === col;
     const isInitial = initialBoard[row][col] !== null;
     const isWrong = board[row][col] !== null && board[row][col] !== solution[row][col];
+    const isWrongAnimation = wrongCell?.[0] === row && wrongCell?.[1] === col;
     
     return `w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center border-2 border-foreground cursor-pointer
       transition-all duration-150 hover:bg-accent/50 font-bold text-lg
       ${isSelected ? 'bg-primary/20 shadow-[2px_2px_0_hsl(var(--foreground))]' : ''}
       ${isInitial ? 'bg-background text-foreground' : 'text-primary bg-card'}
       ${isWrong ? 'text-destructive' : ''}
+      ${isWrongAnimation ? 'animate-shake bg-destructive/30 border-destructive' : ''}
       ${col % 3 === 2 && col !== 8 ? 'border-r-4 border-r-foreground' : ''}
       ${row % 3 === 2 && row !== 8 ? 'border-b-4 border-b-foreground' : ''}`;
   };
