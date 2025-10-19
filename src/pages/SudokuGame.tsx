@@ -224,6 +224,10 @@ export default function SudokuGame() {
       playSound(200, 0.2, 'wrong');
       setWrongCell([row, col]);
       setTimeout(() => setWrongCell(null), 500);
+      
+      if (navigator.vibrate) {
+        navigator.vibrate([100, 50, 100]);
+      }
     } else {
       playSound(523.25, 0.15, 'correct');
     }
