@@ -402,7 +402,7 @@ export default function SudokuGame() {
             </TabsContent>
 
             <TabsContent value="rules" className="animate-fade-in">
-              <Card className="p-6 sm:p-8 pb-32 japanese-card bg-card paper-texture">
+              <Card className="p-6 sm:p-8 pb-16 japanese-card bg-card paper-texture">
                 <h2 className="text-3xl font-bold text-center mb-6 text-foreground">Правила игры</h2>
                 <div className="space-y-4 text-foreground/90">
                   <div className="flex items-start gap-3 p-3 japanese-card bg-background/50">
