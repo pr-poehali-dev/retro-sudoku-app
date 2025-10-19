@@ -290,14 +290,18 @@ export default function SudokuGame() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const isNumberComplete = (num: number): boolean => {
+  const getNumberCount = (num: number): number => {
     let count = 0;
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
         if (board[i][j] === num) count++;
       }
     }
-    return count === 9;
+    return count;
+  };
+
+  const isNumberComplete = (num: number): boolean => {
+    return getNumberCount(num) === 9;
   };
 
   const getCellClassName = (row: number, col: number) => {
@@ -700,17 +704,20 @@ export default function SudokuGame() {
 
           <div className="grid grid-cols-9 gap-2 max-w-md mx-auto mb-4">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => {
-              const isComplete = isNumberComplete(num);
+              const count = getNumberCount(num);
+              const isComplete = count === 9;
+              const remaining = 9 - count;
               return (
                 <Button
                   key={num}
                   onClick={() => handleNumberInput(num)}
                   disabled={!selectedCell || isComplete}
-                  className={`h-12 text-lg font-bold japanese-card bg-background text-foreground hover:bg-accent disabled:opacity-30 transition-opacity ${
+                  className={`h-14 text-lg font-bold japanese-card bg-background text-foreground hover:bg-accent disabled:opacity-30 transition-opacity flex flex-col items-center justify-center gap-0.5 ${
                     isComplete ? 'cursor-not-allowed' : ''
                   }`}
                 >
-                  {num}
+                  <span className="text-xl">{num}</span>
+                  <span className="text-[10px] text-muted-foreground font-normal">{remaining > 0 ? remaining : '✓'}</span>
                 </Button>
               );
             })}
