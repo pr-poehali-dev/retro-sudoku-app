@@ -402,7 +402,7 @@ export default function SudokuGame() {
             </TabsContent>
 
             <TabsContent value="rules" className="animate-fade-in">
-              <Card className="p-6 sm:p-8 japanese-card bg-card paper-texture min-h-[600px]">
+              <Card className="p-6 sm:p-8 pb-32 japanese-card bg-card paper-texture">
                 <h2 className="text-3xl font-bold text-center mb-6 text-foreground">Правила игры</h2>
                 <div className="space-y-4 text-foreground/90">
                   <div className="flex items-start gap-3 p-3 japanese-card bg-background/50">
@@ -469,9 +469,9 @@ export default function SudokuGame() {
             </TabsContent>
 
             <TabsContent value="profile" className="animate-fade-in">
-              <Card className="p-6 sm:p-8 japanese-card bg-card paper-texture min-h-[600px]">
+              <Card className="p-6 sm:p-8 pb-32 japanese-card bg-card paper-texture">
                 <h2 className="text-3xl font-bold text-center mb-6 text-foreground">Профиль игрока</h2>
-                <div className="flex flex-col items-center gap-6">
+                <div className="flex flex-col items-center gap-6 pb-12">
                   <div className="w-28 h-28 japanese-card bg-background flex items-center justify-center relative">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <svg viewBox="0 0 100 100" className="w-20 h-20">
