@@ -554,7 +554,7 @@ export default function SudokuGame() {
           
           <div className="mt-8 p-4 japanese-card bg-card border-foreground">
             <p className="text-sm text-muted-foreground text-center">
-              Создатель: <a href="https://github.com/Maks6831" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Maks6831</a>
+              Создатель: <a href="https://github.com/Maks6831" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Maks6831</a> • Связь: <a href="https://t.me/tenonotik" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">@tenonotik</a>
             </p>
           </div>
         </div>
@@ -717,7 +717,7 @@ export default function SudokuGame() {
       <div className="max-w-4xl mx-auto mt-8 relative z-10">
         <div className="p-4 japanese-card bg-card border-foreground">
           <p className="text-sm text-muted-foreground text-center">
-            Создатель: <a href="https://github.com/Maks6831" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Maks6831</a>
+            Создатель: <a href="https://github.com/Maks6831" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Maks6831</a> • Связь: <a href="https://t.me/tenonotik" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">@tenonotik</a>
           </p>
         </div>
       </div>
