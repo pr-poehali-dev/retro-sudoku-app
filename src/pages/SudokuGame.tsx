@@ -551,6 +551,12 @@ export default function SudokuGame() {
               </Card>
             </TabsContent>
           </Tabs>
+          
+          <div className="mt-8 p-4 japanese-card bg-card border-foreground">
+            <p className="text-sm text-muted-foreground text-center">
+              Создатель: <a href="https://github.com/Maks6831" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Maks6831</a>
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -706,6 +712,14 @@ export default function SudokuGame() {
             </Button>
           </div>
         </Card>
+      </div>
+      
+      <div className="max-w-4xl mx-auto mt-8 relative z-10">
+        <div className="p-4 japanese-card bg-card border-foreground">
+          <p className="text-sm text-muted-foreground text-center">
+            Создатель: <a href="https://github.com/Maks6831" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Maks6831</a>
+          </p>
+        </div>
       </div>
     </div>
   );
