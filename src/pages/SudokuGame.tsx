@@ -290,6 +290,16 @@ export default function SudokuGame() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const isNumberComplete = (num: number): boolean => {
+    let count = 0;
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        if (board[i][j] === num) count++;
+      }
+    }
+    return count === 9;
+  };
+
   const getCellClassName = (row: number, col: number) => {
     const isSelected = selectedCell?.[0] === row && selectedCell?.[1] === col;
     const isInitial = initialBoard[row][col] !== null;
@@ -689,16 +699,21 @@ export default function SudokuGame() {
           </div>
 
           <div className="grid grid-cols-9 gap-2 max-w-md mx-auto mb-4">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
-              <Button
-                key={num}
-                onClick={() => handleNumberInput(num)}
-                disabled={!selectedCell}
-                className="h-12 text-lg font-bold japanese-card bg-background text-foreground hover:bg-accent disabled:opacity-50"
-              >
-                {num}
-              </Button>
-            ))}
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => {
+              const isComplete = isNumberComplete(num);
+              return (
+                <Button
+                  key={num}
+                  onClick={() => handleNumberInput(num)}
+                  disabled={!selectedCell || isComplete}
+                  className={`h-12 text-lg font-bold japanese-card bg-background text-foreground hover:bg-accent disabled:opacity-30 transition-opacity ${
+                    isComplete ? 'cursor-not-allowed' : ''
+                  }`}
+                >
+                  {num}
+                </Button>
+              );
+            })}
           </div>
 
           <div className="flex justify-center gap-3 flex-wrap">
