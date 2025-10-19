@@ -705,7 +705,7 @@ export default function SudokuGame() {
             )}
             <Button
               onClick={() => startNewGame(difficulty)}
-              className="japanese-card bg-card hover:bg-secondary font-medium"
+              className="japanese-card bg-card hover:bg-secondary font-medium text-foreground"
             >
               <Icon name="RotateCw" size={20} className="mr-2" />
               Новая игра
