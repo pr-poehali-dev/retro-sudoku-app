@@ -354,19 +354,19 @@ export default function SudokuGame() {
           <Tabs defaultValue="levels" className="w-full">
             <TabsList className="grid w-full grid-cols-4 mb-6 bg-card japanese-card border-foreground">
               <TabsTrigger value="levels" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
-                <Icon name="Grid3x3" size={18} className="mr-2" />
+                <Icon name="Grid3x3" size={20} className="mr-2" />
                 Уровни
               </TabsTrigger>
               <TabsTrigger value="rules" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
-                <Icon name="BookOpen" size={18} className="mr-2" />
+                <Icon name="BookOpen" size={20} className="mr-2" />
                 Правила
               </TabsTrigger>
               <TabsTrigger value="settings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
-                <Icon name="Settings" size={18} className="mr-2" />
+                <Icon name="Settings" size={20} className="mr-2" />
                 Настройки
               </TabsTrigger>
               <TabsTrigger value="profile" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-medium">
-                <Icon name="User" size={18} className="mr-2" />
+                <Icon name="User" size={20} className="mr-2" />
                 Профиль
               </TabsTrigger>
             </TabsList>
